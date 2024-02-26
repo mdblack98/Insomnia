@@ -11,17 +11,19 @@ namespace Insomnia
 {
     public partial class Form1 : Form
     {
-        private int count = 0;
-        private bool autoOff = false;
-        public Form1(bool autoOff)
+        public int count = 0;
+        public bool autoOff = false;
+        public bool autoExit = false;
+        public Form1()
         {
             InitializeComponent();
-            this.autoOff = autoOff;
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            checkBoxAutoExit.Checked = Properties.Settings.Default.autoExit;
+            checkBoxAutoOff.Checked = Properties.Settings.Default.autoOff;
+            checkBoxAutoExit.Enabled = checkBoxAutoOff.Checked;
         }
 
         private void keepAwake()
@@ -31,22 +33,7 @@ namespace Insomnia
             richTextBox1.AppendText("Reset all to keep awake\n");
             var key = "SYSTEM\\CurrentControlSet\\Enum\\USB";
             SearchRegistryForKey(key, true);
-            if (autoOff)
-            {
-                richTextBox1.AppendText("Autofff selection so will exit");
-                Application.DoEvents();
-                for (int i = 0; i < 6; ++i)
-                {
-                    Application.DoEvents();
-                    richTextBox1.AppendText("..." + (5 - i));
-                    Thread.Sleep(1000);
-                }
-                this.Close();
-            }
-            else
-            {
-                richTextBox1.AppendText("Changed " + count + " items");
-            }
+            richTextBox1.AppendText("Changed " + count + " items");
         }
 
         private void buttonKeepAwake_Click(object sender, EventArgs e)
@@ -54,17 +41,19 @@ namespace Insomnia
             keepAwake();
         }
 
-        private void list()
+        public bool List()
         {
             richTextBox1.Clear();
             count = 0;
             var key = "SYSTEM\\CurrentControlSet\\Enum\\USB";
             SearchRegistryForKey(key);
-            richTextBox1.AppendText("Need to change " + count + " items");
+            richTextBox1.AppendText("Need to change " + count + " items"+"\n");
+            //if (count == 0 && autoExit) this.Close();
+            return count > 0;
         }
         private void buttonList_Click(object sender, EventArgs e)
         {
-            list();
+            List();
         }
 
         public void SearchRegistryForKey(string rootPath, bool turnOff = false)
@@ -139,26 +128,77 @@ namespace Insomnia
                             continue;
                         }
                     }
+                    Application.DoEvents();
                 }
             }
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start(new ProcessStartInfo("https://www.qrz.com/db/W9MDB") { UseShellExecute = true });
+            try
+            {
+                Process.Start(new ProcessStartInfo("https://www.qrz.com/db/W9MDB") { UseShellExecute = true });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void linkLabelHelp_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start(new ProcessStartInfo("Isomnia.htm") { UseShellExecute = true });
+            try
+            {
+                var url = Application.StartupPath + "/Insomnia.htm";
+                url = url.Replace("\\", "/");
+                Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void Form1_Shown(object sender, EventArgs e)
         {
             if (autoOff)
             {
-                keepAwake();
+                if (List())
+                {
+                    if (autoOff)
+                    {
+                        keepAwake();
+                    }
+                }
             }
+            if (autoExit)
+            {
+                richTextBox1.AppendText("Autoff selected so will exit");
+                Application.DoEvents();
+                for (int i = 0; i < 11; ++i)
+                {
+                    Application.DoEvents();
+                    richTextBox1.AppendText("..." + (10 - i));
+                    Thread.Sleep(1000);
+                }
+                this.Close();
+            }
+        }
+
+        private void checkBoxAutoOff_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.autoOff = checkBoxAutoOff.Checked;
+            Properties.Settings.Default.Save();
+            autoOff = checkBoxAutoOff.Checked;
+            if (!autoOff) checkBoxAutoExit.Checked = autoOff;
+            checkBoxAutoExit.Enabled = autoOff;
+        }
+
+        private void checkBoxAutoExit_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.autoExit = checkBoxAutoExit.Checked;
+            Properties.Settings.Default.Save();
+            autoExit = checkBoxAutoExit.Checked;
         }
     }
 }

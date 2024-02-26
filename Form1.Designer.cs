@@ -32,10 +32,11 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             buttonKeepAwake = new Button();
             richTextBox1 = new RichTextBox();
-            linkLabel1 = new LinkLabel();
             toolTip1 = new ToolTip(components);
             buttonList = new Button();
             linkLabelHelp = new LinkLabel();
+            checkBoxAutoOff = new CheckBox();
+            checkBoxAutoExit = new CheckBox();
             SuspendLayout();
             // 
             // buttonKeepAwake
@@ -57,18 +58,6 @@
             richTextBox1.Size = new Size(778, 403);
             richTextBox1.TabIndex = 1;
             richTextBox1.Text = "";
-            // 
-            // linkLabel1
-            // 
-            linkLabel1.AutoSize = true;
-            linkLabel1.Location = new Point(232, 10);
-            linkLabel1.Name = "linkLabel1";
-            linkLabel1.Size = new Size(99, 15);
-            linkLabel1.TabIndex = 3;
-            linkLabel1.TabStop = true;
-            linkLabel1.Text = "USB Devices Only";
-            toolTip1.SetToolTip(linkLabel1, "QRZ Link to W9MDB");
-            linkLabel1.LinkClicked += linkLabel1_LinkClicked;
             // 
             // buttonList
             // 
@@ -92,14 +81,37 @@
             linkLabelHelp.Text = "Help";
             linkLabelHelp.LinkClicked += linkLabelHelp_LinkClicked;
             // 
+            // checkBoxAutoOff
+            // 
+            checkBoxAutoOff.AutoSize = true;
+            checkBoxAutoOff.Location = new Point(240, 10);
+            checkBoxAutoOff.Name = "checkBoxAutoOff";
+            checkBoxAutoOff.Size = new Size(72, 19);
+            checkBoxAutoOff.TabIndex = 6;
+            checkBoxAutoOff.Text = "Auto Off";
+            checkBoxAutoOff.UseVisualStyleBackColor = true;
+            checkBoxAutoOff.CheckedChanged += checkBoxAutoOff_CheckedChanged;
+            // 
+            // checkBoxAutoExit
+            // 
+            checkBoxAutoExit.AutoSize = true;
+            checkBoxAutoExit.Location = new Point(325, 10);
+            checkBoxAutoExit.Name = "checkBoxAutoExit";
+            checkBoxAutoExit.Size = new Size(73, 19);
+            checkBoxAutoExit.TabIndex = 7;
+            checkBoxAutoExit.Text = "Auto Exit";
+            checkBoxAutoExit.UseVisualStyleBackColor = true;
+            checkBoxAutoExit.CheckedChanged += checkBoxAutoExit_CheckedChanged;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(checkBoxAutoExit);
+            Controls.Add(checkBoxAutoOff);
             Controls.Add(linkLabelHelp);
             Controls.Add(buttonList);
-            Controls.Add(linkLabel1);
             Controls.Add(richTextBox1);
             Controls.Add(buttonKeepAwake);
             Icon = (Icon)resources.GetObject("$this.Icon");
@@ -115,9 +127,10 @@
 
         private Button buttonKeepAwake;
         private RichTextBox richTextBox1;
-        private LinkLabel linkLabel1;
         private ToolTip toolTip1;
         private Button buttonList;
         private LinkLabel linkLabelHelp;
+        private CheckBox checkBoxAutoOff;
+        private CheckBox checkBoxAutoExit;
     }
 }

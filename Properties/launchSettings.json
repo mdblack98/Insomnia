@@ -1,8 +1,7 @@
 {
   "profiles": {
     "Insomnia": {
-      "commandName": "Project",
-      "commandLineArgs": "-autooff"
+      "commandName": "Project"
     }
   }
 }

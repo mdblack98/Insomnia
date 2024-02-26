@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Security.Principal;
 
 namespace Insomnia
@@ -12,17 +13,6 @@ namespace Insomnia
         [STAThread]
         static void Main(String[] args)
         {
-            bool autoOff = false;
-            if (args.Length > 0)
-            {
-                for (int i = 0; i < args.Length; i++)
-                {
-                    if (args[i].Equals("-autooff"))
-                    {
-                        autoOff = true;
-                    }
-                }
-            }
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             if (IsUserAdministrator())
@@ -30,7 +20,7 @@ namespace Insomnia
                 ApplicationConfiguration.Initialize();
                 try
                 {
-                    Application.Run(new Form1(autoOff));
+                    Application.Run(new Form1());
                 }
                 catch { }
             }
@@ -38,17 +28,34 @@ namespace Insomnia
             {
                 try
                 {
-                    // Setting up start info of the new process to run as admin
-                    var startInfo = new ProcessStartInfo
+                    var form1 = new Form1();
+                    form1.Show();
+                    Application.DoEvents();
+                    //for(int i=0; i < 10; i++) { Thread.Sleep(300);Application.DoEvents(); }
+                    //form1.List();
+                    if (form1.count > 0) // then we need to change power off and need Admin
                     {
-                        UseShellExecute = true,
-                        WorkingDirectory = Environment.CurrentDirectory,
-                        FileName = System.Reflection.Assembly.GetExecutingAssembly().Location,
-                        Verb = "runas"
-                    };
-                    startInfo.FileName = startInfo.FileName.Replace(".dll", ".exe");
-                    // Start the new process
-                    Process.Start(startInfo);
+                        // Setting up start info of the new process to run as admin
+                        var startInfo = new ProcessStartInfo
+                        {
+                            UseShellExecute = true,
+                            WorkingDirectory = Environment.CurrentDirectory,
+                            FileName = System.Reflection.Assembly.GetExecutingAssembly().Location,
+                            Verb = "runas"
+                        };
+                        startInfo.FileName = startInfo.FileName.Replace(".dll", ".exe");
+                        // Start the new process
+                        Process.Start(startInfo);
+                    }
+                    else if (form1.autoExit)
+                    {
+                        Application.Exit();
+                    }
+                    else
+                    {
+                        form1.List();
+                        Application.Run(form1);
+                    }
                 }
                 catch (Exception ex)
                 {

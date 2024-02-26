@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Insomnia"
-#define MyAppVersion "1.0"
+#define MyAppVersion "1_0"
 #define MyAppPublisher "W9MDB"
 #define MyAppURL "https://www.qrz.com/db/W9MDB"
 #define MyAppExeName "Insomnia.exe"
@@ -22,8 +22,8 @@ DefaultDirName={autopf}\{#MyAppName}
 DisableProgramGroupPage=yes
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 ;PrivilegesRequired=lowest
-OutputBaseFilename=mysetup
-SetupIconFile=C:\Users\mdbla\Downloads\icons8-wake-up-with-sun-32.ico
+OutputBaseFilename=Insomnia{#MyAppVersion}
+SetupIconFile=C:\Users\mdbla\DropBox\Projects\Insomnia\icons8-sleep-96.ico
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
@@ -35,6 +35,7 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
+Source: "C:\Users\mdbla\Dropbox\Projects\Insomnia\Insomnia.htm"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\mdbla\Dropbox\Projects\Insomnia\bin\Release\net8.0-windows\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\mdbla\Dropbox\Projects\Insomnia\bin\Release\net8.0-windows\Insomnia.deps.json"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\mdbla\Dropbox\Projects\Insomnia\bin\Release\net8.0-windows\Insomnia.exe"; DestDir: "{app}"; Flags: ignoreversion
