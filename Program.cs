@@ -53,7 +53,7 @@ namespace Insomnia
                     }
                     else
                     {
-                        form1.List();
+                        //form1.List();
                         Application.Run(form1);
                     }
                 }
@@ -66,7 +66,7 @@ namespace Insomnia
                 Environment.Exit(0);
             }
         }
-        private static bool IsUserAdministrator()
+        public static bool IsUserAdministrator()
         {
             bool isAdmin;
             try

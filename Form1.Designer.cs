@@ -34,9 +34,9 @@
             richTextBox1 = new RichTextBox();
             toolTip1 = new ToolTip(components);
             buttonList = new Button();
-            linkLabelHelp = new LinkLabel();
             checkBoxAutoOff = new CheckBox();
             checkBoxAutoExit = new CheckBox();
+            linkLabelHelp = new LinkLabel();
             SuspendLayout();
             // 
             // buttonKeepAwake
@@ -55,9 +55,10 @@
             richTextBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             richTextBox1.Location = new Point(10, 35);
             richTextBox1.Name = "richTextBox1";
-            richTextBox1.Size = new Size(778, 403);
+            richTextBox1.Size = new Size(593, 403);
             richTextBox1.TabIndex = 1;
             richTextBox1.Text = "";
+            richTextBox1.WordWrap = false;
             // 
             // buttonList
             // 
@@ -66,20 +67,9 @@
             buttonList.Size = new Size(104, 23);
             buttonList.TabIndex = 4;
             buttonList.Text = "List Devices";
-            toolTip1.SetToolTip(buttonList, "Set all USB devices to stay awake");
+            toolTip1.SetToolTip(buttonList, "List sleep status of all USB devices");
             buttonList.UseVisualStyleBackColor = true;
             buttonList.Click += buttonList_Click;
-            // 
-            // linkLabelHelp
-            // 
-            linkLabelHelp.AutoSize = true;
-            linkLabelHelp.Location = new Point(689, 9);
-            linkLabelHelp.Name = "linkLabelHelp";
-            linkLabelHelp.Size = new Size(32, 15);
-            linkLabelHelp.TabIndex = 5;
-            linkLabelHelp.TabStop = true;
-            linkLabelHelp.Text = "Help";
-            linkLabelHelp.LinkClicked += linkLabelHelp_LinkClicked;
             // 
             // checkBoxAutoOff
             // 
@@ -89,6 +79,7 @@
             checkBoxAutoOff.Size = new Size(72, 19);
             checkBoxAutoOff.TabIndex = 6;
             checkBoxAutoOff.Text = "Auto Off";
+            toolTip1.SetToolTip(checkBoxAutoOff, "Auto turn off of sleep if needed");
             checkBoxAutoOff.UseVisualStyleBackColor = true;
             checkBoxAutoOff.CheckedChanged += checkBoxAutoOff_CheckedChanged;
             // 
@@ -100,14 +91,27 @@
             checkBoxAutoExit.Size = new Size(73, 19);
             checkBoxAutoExit.TabIndex = 7;
             checkBoxAutoExit.Text = "Auto Exit";
+            toolTip1.SetToolTip(checkBoxAutoExit, "Auto exit program");
             checkBoxAutoExit.UseVisualStyleBackColor = true;
             checkBoxAutoExit.CheckedChanged += checkBoxAutoExit_CheckedChanged;
+            // 
+            // linkLabelHelp
+            // 
+            linkLabelHelp.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            linkLabelHelp.AutoSize = true;
+            linkLabelHelp.Location = new Point(504, 9);
+            linkLabelHelp.Name = "linkLabelHelp";
+            linkLabelHelp.Size = new Size(32, 15);
+            linkLabelHelp.TabIndex = 5;
+            linkLabelHelp.TabStop = true;
+            linkLabelHelp.Text = "Help";
+            linkLabelHelp.LinkClicked += linkLabelHelp_LinkClicked;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(615, 450);
             Controls.Add(checkBoxAutoExit);
             Controls.Add(checkBoxAutoOff);
             Controls.Add(linkLabelHelp);
@@ -116,9 +120,10 @@
             Controls.Add(buttonKeepAwake);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Form1";
-            Text = "Insomnia V1.0";
+            Text = "Insomnia V1.1";
             Load += Form1_Load;
             Shown += Form1_Shown;
+            ResizeEnd += Form1_ResizeEnd;
             ResumeLayout(false);
             PerformLayout();
         }
