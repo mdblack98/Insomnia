@@ -38,10 +38,10 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Source: "C:\Users\mdbla\Dropbox\Projects\Insomnia\Insomnia.htm"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\mdbla\Dropbox\Projects\Insomnia\bin\Release\net8.0-windows\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\mdbla\Dropbox\Projects\Insomnia\bin\Release\net8.0-windows\Insomnia.deps.json"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\mdbla\Dropbox\Projects\Insomnia\bin\Release\net8.0-windows\Insomnia.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\mdbla\Dropbox\Projects\Insomnia\bin\Release\net8.0-windows\Insomnia.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\mdbla\Dropbox\Projects\Insomnia\bin\Release\net8.0-windows\Insomnia.pdb"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\mdbla\Dropbox\Projects\Insomnia\bin\Release\net8.0-windows\Insomnia.runtimeconfig.json"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\mdbla\Dropbox\Projects\Insomnia\bin\Release\net8.0-windows\*"; DestDir: "{app}"; Flags: ignoreversion createallsubdirs recursesubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
