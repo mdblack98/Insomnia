@@ -67,9 +67,9 @@ namespace Insomnia
         }
 
 
-        public static string GetUsbDeviceCommonName(string vid, string pid)
+        public static string? GetUsbDeviceCommonName(string vid, string pid)
         {
-            string commonName = "Device not found";
+            string? commonName = "Device not found";
             string queryString = "SELECT * FROM Win32_PnPEntity WHERE DeviceID LIKE '%USB%'";
             if (searcher == null) searcher = new ManagementObjectSearcher(queryString);
             try
@@ -82,9 +82,9 @@ namespace Insomnia
                     // Execute the query
                     foreach (var device in searcher.Get())
                     {
-                        string deviceId = device["DeviceID"].ToString();
+                        string? deviceId = device["DeviceID"].ToString();
                         // Check if the device ID contains the VID and PID
-                        if (deviceId.Contains($"VID_{vid}&PID_{pid}"))
+                        if (deviceId != null && deviceId.Contains($"VID_{vid}&PID_{pid}"))
                         {
                             // Get the common name of the device
                             commonName = device["Name"].ToString();
@@ -104,8 +104,6 @@ namespace Insomnia
         public bool List()
         {
             richTextBox1.Clear();
-            //richTextBox1.AppendText(DisplayRectangle.ToString() + "\n");
-            //Thread.Sleep(2000);
             count = 0;
             var key = "SYSTEM\\CurrentControlSet\\Enum\\USB";
             SearchRegistryForKey(key);
@@ -128,7 +126,7 @@ namespace Insomnia
         {
             List();
         }
-        String ParseVIDPID(string vidpid)
+        String? ParseVIDPID(string vidpid)
         {
             // Regular expression pattern to match VID and PID
             string pattern = @"VID_([0-9A-Fa-f]+)&PID_([0-9A-Fa-f]+)";
@@ -206,7 +204,7 @@ namespace Insomnia
                                             {
                                                 //rootKey.SetValue(subKeyName, 0, RegistryValueKind.DWord);
                                                 var subKey2 = rootKey.OpenSubKey(subKeyName, true);
-                                                subKey2.SetValue("IdleInWorkingState", 0);
+                                                if (subKey2 != null) subKey2.SetValue("IdleInWorkingState", 0);
                                                 s = "0";
                                             }
                                             catch (Exception ex)
@@ -216,7 +214,7 @@ namespace Insomnia
                                             changed = "Changed";
                                             count++;
                                         }
-                                        else if (value.ToString().Equals("1"))
+                                        if (value != null && value.ToString().Equals("1", StringComparison.Ordinal))
                                         {
                                             changed = ":Change needed";
                                             count++;
@@ -228,18 +226,13 @@ namespace Insomnia
                                             {
                                                 var vidpid = ParseVIDPID(subKey.ToString());
                                                 var s1 = subKey.ToString()[i1..];
-                                                if (s1 != null)
+                                                if (s1 != null && value != null)
                                                 {
-                                                    if (vidpid == "") vidpid = "Unknown Description";
+                                                    if (vidpid != null && vidpid == "") vidpid = "Unknown Description";
                                                     richTextBox1.AppendText(value.ToString() + ":" + vidpid + ":" + s1 + changed + "\n");
+                                                    richTextBox1.ScrollToCaret();
                                                     Application.DoEvents();
                                                 }
-                                                //else richTextBox1.AppendText("Here#2\n");
-                                            }
-                                            else
-                                            {
-                                                //richTextBox1.AppendText("Here#3\n");
-
                                             }
                                         }
                                         catch (Exception e) { richTextBox1.AppendText(e.Message+"\n"); }
@@ -250,7 +243,6 @@ namespace Insomnia
                     }
                     Application.DoEvents();
                 }
-                //richTextBox1.AppendText(" Got it\n");
             }
             catch (Exception e)
             {
