@@ -120,7 +120,7 @@
             Controls.Add(buttonKeepAwake);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Form1";
-            Text = "Insomnia V1.1";
+            Text = "Insomnia V1.2";
             Load += Form1_Load;
             Shown += Form1_Shown;
             ResizeEnd += Form1_ResizeEnd;
