@@ -31,8 +31,13 @@ namespace Insomnia
             Width = Properties.Settings.Default.width;
             Height = Properties.Settings.Default.height;
             Location = new Point(Properties.Settings.Default.X,Properties.Settings.Default.Y);
-            buttonKeepAwake.Enabled = false;
+            buttonKeepAwake.Enabled = true;
             EnsureWithinScreenBounds();
+            if (!Program.IsUserAdministrator())
+            {
+                richTextBox1.AppendText("Must run as Administrator for Keep Awake to be enabled\r\n");
+                buttonKeepAwake.Enabled = false;
+            }
         }
         private void EnsureWithinScreenBounds()
         {
@@ -51,7 +56,11 @@ namespace Insomnia
         }
         private void keepAwake()
         {
-            if (!Program.IsUserAdministrator()) return;
+            if (!Program.IsUserAdministrator())
+            {
+                MessageBox.Show("Must run as Administrator to keep awake");
+                return;
+            }
             richTextBox1.Clear();
             count = 0;
             richTextBox1.AppendText("Reset all to keep awake\n");
@@ -69,7 +78,7 @@ namespace Insomnia
 
         public static string? GetUsbDeviceCommonName(string vid, string pid)
         {
-            string? commonName = "Device not found";
+            string? commonName = "No device name";
             string queryString = "SELECT * FROM Win32_PnPEntity WHERE DeviceID LIKE '%USB%'";
             if (searcher == null) searcher = new ManagementObjectSearcher(queryString);
             try
@@ -104,17 +113,29 @@ namespace Insomnia
         public bool List()
         {
             richTextBox1.Clear();
+            if (!Program.IsUserAdministrator())
+            {
+                richTextBox1.AppendText("Must run as Administrator to keep awake\n");
+            }
             count = 0;
             var key = "SYSTEM\\CurrentControlSet\\Enum\\USB";
             SearchRegistryForKey(key);
             if (count > 0)
             {
                 richTextBox1.AppendText("Need to change " + count + " item" + (count > 1?"s":"") + "\n");
-                if (checkBoxAutoExit.Checked) richTextBox1.AppendText("Will restart in admin mode...");
-                else richTextBox1.AppendText("Click Keep Awake button to change\n");
                 Application.DoEvents();
                 Thread.Sleep(3000);
-                buttonKeepAwake.Enabled = true;
+                if (!Program.IsUserAdministrator())
+                {
+                    richTextBox1.AppendText("Must run as Administrator to keep awake");
+                    buttonKeepAwake.Enabled = false;
+                }
+                else
+                {
+                    buttonKeepAwake.Enabled = true;
+                    if (checkBoxAutoExit.Checked) richTextBox1.AppendText("Will restart in admin mode...");
+                    else richTextBox1.AppendText("Click Keep Awake button to change\n");
+                }
             }
             else
             {
@@ -214,10 +235,13 @@ namespace Insomnia
                                             changed = "Changed";
                                             count++;
                                         }
-                                        if (value != null && value.ToString().Equals("1", StringComparison.Ordinal))
+                                        if (value != null && value.ToString() != null)
                                         {
-                                            changed = ":Change needed";
-                                            count++;
+                                            if (value.ToString().Equals("1", StringComparison.Ordinal))
+                                            {
+                                                changed = ":Change needed";
+                                                count++;
+                                            }
                                         }
                                         try
                                         {
